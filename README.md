@@ -43,5 +43,5 @@ Run the CRC implementing the SRC policie:
 
 ## Authors
 
-* **Klevis** - [klevis](https://github.com/)
+* **Klevis Shkembi** - [klevis](https://github.com/KlevisShkembi)
 * **Cristòfol Daudén Esmel** - [toful](https://github.com/toful)

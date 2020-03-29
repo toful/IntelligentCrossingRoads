@@ -1,5 +1,5 @@
 ;;; Authors:    Cristòfol Daudén Esmel
-;;;             Klevis
+;;;             Klevis Shkembi
 
 (clear)
 (load "car.clp")
@@ -14,22 +14,34 @@
         (declare (salience 0)) ; medium priority –default 0    
         ?crc <- (crc 1 ?cars-crossed&:(< ?cars-crossed ?*max-cars-crossed*) )    
         ?car <- (car ?id ?direction&:(or (= ?direction 1) (= ?direction 2)) waiting )
+        (not (car ?id2&:(< ?id2 ?id) ?direction2&:(or (= ?direction2 1) (= ?direction2 2)) waiting ) ) ;checking the order
         =>      
         (retract ?crc ?car)      
-        (assert (car ?id ?direction crossed ) 
+        (assert (car ?id ?direction crossing ) 
                 (crc 1 (+ ?cars-crossed 1)))    
-        (printout T "car with id " ?id " has crossed the intersection from " ?direction "." crlf))
+        (printout T "car with id " ?id " is going to cross the intersection from " ?direction "." crlf))
 
 
 (defrule crossE-W
         (declare (salience 0)) ; medium priority –default 0    
         ?crc <- (crc 2 ?cars-crossed&:(< ?cars-crossed ?*max-cars-crossed*) )    
         ?car <- (car ?id ?direction&:(or (= ?direction 3) (= ?direction 4)) waiting )
+        (not (car ?id2&:(< ?id2 ?id) ?direction2&:(or (= ?direction2 3) (= ?direction2 4)) waiting ) ) ;checking the order
         =>      
         (retract ?crc ?car)      
-        (assert (car ?id ?direction crossed ) 
+        (assert (car ?id ?direction crossing ) 
                 (crc 2 (+ ?cars-crossed 1)))    
-        (printout T "car with id " ?id " has crossed the intersection from " ?direction "." crlf))
+        (printout T "car with id " ?id " is going to cross the intersection from " ?direction "." crlf))
+
+
+(defrule car-crossing
+        (declare (salience 1))
+        ?car <- (car ?id ?direction crossing )
+        =>
+        (retract ?car)
+        ;(assert (car ?id ?direction crossed )) ;only if we want to maintain the history
+        (printout T "car with id " ?id " has crossed." crlf))
+
 
 
 (defrule maxCarsCrossed 
@@ -52,7 +64,7 @@
 
 
 (defrule start
-        (declare (salience 1))
+        (declare (salience 2))
         (not (exists (crc)))
         =>
         (printout T "How much cars do you want to work with?" crlf)
