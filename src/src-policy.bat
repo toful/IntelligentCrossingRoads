@@ -9,6 +9,8 @@
         ;<state> from where cars are going to cross: N-S:1 E-W:2 
         ;<cars-crossed> number of cars that have crossed in the current state
 
+(start_condition <start>) ;auxiliar value in order to suply exists function
+(assert (start_condition 1) )
 
 (defrule crossN-S
         (declare (salience 0)) ; medium priority –default 0    
@@ -56,7 +58,8 @@
 (defrule noMoreCarsToCross 
         (declare (salience -1)) ;min priority, when no cars in the current direction can move
         ?crc <- (crc ?state ?cars-crossed)
-        (exists (car ?id ?direction waiting)) ;to avoid an infinit loop when all cars have crossed
+        ;(exists (car ?id ?direction waiting)) ;exists command does not work
+        ?car_aux <- (car ?id ?direction waiting) ;to avoid an infinit loop when all cars have crossed
         =>
         (retract ?crc)
         (assert (crc (+ (mod ?state 2) 1) 0))
@@ -65,8 +68,10 @@
 
 (defrule start
         (declare (salience 2))
-        (not (exists (crc)))
+        ;(not (exists (crc))) ;exists command does not work
+        ?aux <- (start_condition ?start)
         =>
+        (retract ?aux)
         (printout T "How much cars do you want to work with?" crlf)
         (bind ?r (read))
         (new-car ?r)

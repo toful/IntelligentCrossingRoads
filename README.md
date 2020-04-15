@@ -8,11 +8,11 @@ Design and implementation of an Expert System over the CLIPS shell that controls
 
 In the new era of the Internet of Things (IOT) and autonomous cars (AC), a change in the control of crossing roads is expected that will replace all traffic lights by peer‐to‐peer communication between cars and crossing road controls (CRC). With these new intelligent crossings, cars will arrive in one of four possible directions (North, South, East, or West), they will communicate their arrival, and will wait in line until they are given the way. 
 
-We are have designed two types of CRCs implementing two alternative preference policies: 
+We have designed two types of CRCs implementing two alternative preference policies: 
 * straight‐right crossing (SRC)
 * straight‐right‐left crossing (SRLC)
 
-SRLC and the SRC are going to be implemented as two separate set of rules in a Rule Production System with CLIPS.
+SRLC and the SRC have been implemented as two separate set of rules in a Rule Production System with CLIPS.
 
 ### Straight‐Right Crossing (SRC)
 
