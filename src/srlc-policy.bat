@@ -1,22 +1,36 @@
 ;;; Authors:    Cristòfol Daudén Esmel
 ;;;             Klevis Shkembi
 
-(deftemplate car (slot id) (slot direction) (slot arrival) (slot state)) 
-;<id>  cars identification
-;<direction>  The direction where cars come from (N,S,E,W)
-;<arrival> the arrival position that cars arrive at intesrsection(1,2,3,4..)
-;<state> state of the car: Waiting ,crossing,crossed
+(load "car.clp")
+(crc <state> <cars-crossed>)
+(start_condition <start>)
+(assert (start_condition 1))
 
-(defrule SRlC      ; "Cars will pass according to their arrival at intesection point."
-        ?P <- (car  (id ?id) (direction ?direction) (arrival ?arrival) (state waiting))
-        ?P1 <- (car (id ?) (direction ? ) (arrival ?arrival2&:(- ?arrival2 ?arrival 1)) (state crossing))
-        (not (car (id ?) (direction ?) (arrival ?arrival3&:(< ?arrival3 ?arrival)) (state waiting)))
-        =>
-        (retract ?P)
-        (modify ?P1 (state crossed))
-        (assert (car (id ?id) (direction ?direction) (arrival ?arrival) (state crossing)))
-        (printout T "car with id " ?id " has arrived at cross at arrival " ?arrival crlf
-        " and is going to cross the intersection from direction " ?direction crlf)) 
-    
-    (run)
-    
+CLIPS> (defrule SRLC
+       (declare (salience 0))
+       ?car <- (car ?id ?direction waiting)
+       (not (car ?id2&:(< ?id2 ?id) ?direction2 waiting))
+       =>
+        (retract ?car)
+        (assert (car ?id ?direction crossing))
+(printout t "Car with id " ?id " is going to cross the intersection from " ?direction crlf))
+
+(defrule cars-crossing
+       (declare (salience 1))
+       ?car <- (car ?id ?direction crossing)
+       =>
+       (retract ?car)
+       (assert (car ?id ?direction crossed))
+       (printout t " Car with id " ?id " has been crossed " crlf))
+       
+       
+(defrule start
+       (declare (salience 2))
+       ?aux <- (start_condition ?start)
+       =>
+       (retract ?aux)
+       (printout t " How much cars do you want to work with " crlf)
+       (bind ?r (read))
+       (new-car ?r))        
+       
+ (run)
