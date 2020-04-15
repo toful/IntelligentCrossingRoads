@@ -3,13 +3,15 @@
 
 (load "car.clp")
 (crc <state> <cars-crossed>)
-(start_condition <start>)
+ ;<state> from where cars are going to cross: N,S,E,W 
+ ;<cars-crossed> number of cars that have crossed in the current state
+(start_condition <start>)  ;auxiliar value in order to suply exists function
 (assert (start_condition 1))
 
 (defrule SRLC
        (declare (salience 0))
        ?car <- (car ?id ?direction waiting)
-       (not (car ?id2&:(< ?id2 ?id) ?direction2 waiting))
+       (not (car ?id2&:(< ?id2 ?id) ?direction2 waiting)) ;cheecking the arrival order
        =>
         (retract ?car)
         (assert (car ?id ?direction crossing))
