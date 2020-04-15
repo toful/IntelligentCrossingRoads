@@ -6,7 +6,7 @@
 (start_condition <start>)
 (assert (start_condition 1))
 
-CLIPS> (defrule SRLC
+(defrule SRLC
        (declare (salience 0))
        ?car <- (car ?id ?direction waiting)
        (not (car ?id2&:(< ?id2 ?id) ?direction2 waiting))
