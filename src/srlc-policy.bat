@@ -13,7 +13,7 @@ CLIPS> (defrule SRLC
        =>
         (retract ?car)
         (assert (car ?id ?direction crossing))
-(printout t "Car with id " ?id " is going to cross the intersection from " ?direction crlf))
+(printout t "Car with id " ?id " is going to cross the intersection from direction " ?direction crlf))
 
 (defrule cars-crossing
        (declare (salience 1))
